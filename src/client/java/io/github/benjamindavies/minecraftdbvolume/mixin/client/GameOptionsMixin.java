@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GameOptions.class)
 public class GameOptionsMixin {
+    private static final int DB_RANGE = 40;
+
     @Inject(at = @At("HEAD"), method = "createSoundVolumeOption", cancellable = true)
     private void createSoundVolumeOption(String key, SoundCategory category, CallbackInfoReturnable<SimpleOption<Double>> callbackInfo) {
         SimpleOption<Double> option = new SimpleOption<Double>(
@@ -22,7 +24,8 @@ public class GameOptionsMixin {
                     if (value == 0.0) {
                         return GameOptions.getGenericValueText(prefix, ScreenTexts.OFF);
                     }
-                    return Text.translatable("options.db_value", new Object[]{prefix, (int) volumeToDb(value)});
+                    String dbString = String.format("%.1f", volumeToDb(value));
+                    return Text.translatable("options.db_value", new Object[]{prefix, dbString});
                 },
                 SimpleOption.DoubleSliderCallbacks.INSTANCE
                         .withModifier(
@@ -30,13 +33,13 @@ public class GameOptionsMixin {
                                     if (sliderProgressValue == 0.0) {
                                         return 0.0;
                                     }
-                                    return dbToVolume(60 * (sliderProgressValue - 1));
+                                    return dbToVolume(DB_RANGE * (sliderProgressValue - 1));
                                 },
                                 value -> {
                                     if (value == 0.0) {
                                         return 0.0;
                                     }
-                                    return volumeToDb(value) / 60 + 1;
+                                    return volumeToDb(value) / DB_RANGE + 1;
                                 }),
                 1.0,
                 value -> MinecraftClient.getInstance().getSoundManager().updateSoundVolume(category, value.floatValue()));
