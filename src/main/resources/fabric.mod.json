@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "db-volume",
+	"version": "${version}",
+	"name": "dB Volume",
+	"description": "Replaces linear volume sliders with logarithmic dB sliders.",
+	"authors": [
+		"Benjamin Davies"
+	],
+	"contact": {
+		"homepage": "https://github.com/Benjamin-Davies/minecraft-db-volume#readme",
+		"sources": "https://github.com/Benjamin-Davies/minecraft-db-volume"
+	},
+	"license": "none",
+	"icon": "assets/db-volume/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [],
+		"client": []
+	},
+	"mixins": [
+		{
+			"config": "db-volume.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.15.9",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
